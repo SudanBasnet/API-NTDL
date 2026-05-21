@@ -1,42 +1,12 @@
 import express from "express";
-import mongoose from "mongoose";
+import {
+  deleteTask,
+  getTask,
+  insertTask,
+  updateTask,
+} from "../models/taskModel/taskSchema.js";
 
 const router = express.Router();
-// router.all("/", (req, res, next) => {
-
-//   //do your code
-//   //   res.json({
-//   //     message: "success",
-//   //     status: "response from all",
-//   //   });
-//   next();
-// });
-
-//!database table selecting
-
-const taskSchema = new mongoose.Schema(
-  {
-    task: {
-      type: String,
-      required: true,
-    },
-    hr: {
-      type: Number,
-      required: true,
-      min: 1,
-      max: [100, "Are you Sure, it seems too much hours"],
-    },
-    type: {
-      type: String,
-      default: "entry",
-      enum: ["entry", "bad"],
-    },
-  },
-  { timestamps: true },
-);
-const taskCollection = mongoose.model("Task", taskSchema);
-
-//* schema creating
 
 //!Create item
 router.post("/", async (req, res, next) => {
@@ -44,7 +14,7 @@ router.post("/", async (req, res, next) => {
     //do your code
     //? insert task
 
-    const result = await taskCollection(req.body).save();
+    const result = await insertTask(req.body);
     console.log(result);
     // console.log(req.body);
     res.json({
@@ -63,7 +33,7 @@ router.post("/", async (req, res, next) => {
 router.get("/", async (req, res, next) => {
   //do your code
   //db.c.find()
-  const tasks = await taskCollection.find();
+  const tasks = await getTask();
   res.json({
     message: "success",
     status: "response from get",
@@ -75,7 +45,7 @@ router.patch("/", async (req, res, next) => {
   //do your code
   const { _id, ...rest } = req.body;
   console.log(req.body);
-  const result = await taskCollection.findByIdAndUpdate(_id, rest);
+  const result = await updateTask(_id, rest);
   res.json({
     message: "success",
     status: "response from put: your task has been updated successfully",
@@ -87,7 +57,7 @@ router.delete("/:_id", async (req, res, next) => {
   //do your code
   const { _id } = req.params;
   console.log(typeof id);
-  const result = await taskCollection.findByIdAndDelete(_id);
+  const result = await deleteTask(_id);
 
   res.json({
     message: "success",

@@ -8,8 +8,9 @@ Content-Type: application/json
 {
     
     "task":"sleeping",
-    "hr":7,
-    "type":"entry"
+    "hr":10,
+    "type":"bad"
+
 }
 
 ### GET the task list

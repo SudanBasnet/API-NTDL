@@ -14,24 +14,50 @@ const router = express.Router();
 
 //!database table selecting
 
-const taskSchema = new mongoose.Schema({}, { strict: false });
+const taskSchema = new mongoose.Schema(
+  {
+    task: {
+      type: String,
+      required: true,
+    },
+    hr: {
+      type: Number,
+      required: true,
+      min: 1,
+      max: [100, "Are you Sure, it seems too much hours"],
+    },
+    type: {
+      type: String,
+      default: "entry",
+      enum: ["entry", "bad"],
+    },
+  },
+  { timestamps: true },
+);
 const taskCollection = mongoose.model("Task", taskSchema);
 
 //* schema creating
 
 //!Create item
 router.post("/", async (req, res, next) => {
-  //do your code
-  //? insert task
-  console.log(req.body, "------");
+  try {
+    //do your code
+    //? insert task
 
-  const result = await taskCollection(req.body).save();
-  console.log(result);
-  console.log(req.body);
-  res.json({
-    message: "success",
-    status: "New Task has been added Successfully",
-  });
+    const result = await taskCollection(req.body).save();
+    console.log(result);
+    // console.log(req.body);
+    res.json({
+      message: "success",
+      status: "New Task has been added Successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({
+      status: "error",
+      message: error.message,
+    });
+  }
 });
 
 router.get("/", async (req, res, next) => {

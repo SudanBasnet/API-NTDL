@@ -17,6 +17,8 @@ const router = express.Router();
 const taskSchema = new mongoose.Schema({}, { strict: false });
 const taskCollection = mongoose.model("Task", taskSchema);
 
+//* schema creating
+
 //!Create item
 router.post("/", async (req, res, next) => {
   //do your code

@@ -6,7 +6,7 @@ POST {{baseUrl}}
 Content-Type: application/json
 
 {
-    "id":2,
+    
     "task":"sleeping",
     "hr":7,
     "type":"entry"
@@ -21,9 +21,10 @@ Content-Type: application/json
 
 
 {
-    "id":2,
-    "type":"bad"
+    "_id":"6a0ed63363ba0dd7699296f7",
+    "hr": 8,
+    "type": "bad"
 }
 
 ### Delete the task list
-DELETE {{baseUrl}}/2
+DELETE {{baseUrl}}/6a0ed63363ba0dd7699296f7

@@ -1,7 +1,9 @@
 import express from "express";
+import mongoose from "mongoose";
 
 const router = express.Router();
 // router.all("/", (req, res, next) => {
+
 //   //do your code
 //   //   res.json({
 //   //     message: "success",
@@ -10,10 +12,19 @@ const router = express.Router();
 //   next();
 // });
 
-//!Create item
-router.post("/", (req, res, next) => {
-  //do your code
+//!database table selecting
 
+const taskSchema = new mongoose.Schema({}, { strict: false });
+const taskCollection = mongoose.model("Task", taskSchema);
+
+//!Create item
+router.post("/", async (req, res, next) => {
+  //do your code
+  //? insert task
+  console.log(req.body, "------");
+
+  const result = await taskCollection(req.body).save();
+  console.log(result);
   console.log(req.body);
   res.json({
     message: "success",
@@ -21,20 +32,22 @@ router.post("/", (req, res, next) => {
   });
 });
 
-router.get("/", (req, res, next) => {
+router.get("/", async (req, res, next) => {
   //do your code
+  //db.c.find()
+  const tasks = await taskCollection.find();
   res.json({
     message: "success",
     status: "response from get",
-    tasks: [],
+    tasks,
   });
 });
 
-router.patch("/", (req, res, next) => {
-  console.log(req.body);
+router.patch("/", async (req, res, next) => {
   //do your code
-  const { id, type } = req.body;
-  console.log(id, type);
+  const { _id, ...rest } = req.body;
+  console.log(req.body);
+  const result = await taskCollection.findByIdAndUpdate(_id, rest);
   res.json({
     message: "success",
     status: "response from put: your task has been updated successfully",
@@ -42,15 +55,16 @@ router.patch("/", (req, res, next) => {
 });
 
 //!delete
-router.delete("/:id", (req, res, next) => {
+router.delete("/:_id", async (req, res, next) => {
   //do your code
-  const { id } = req.params;
+  const { _id } = req.params;
   console.log(typeof id);
+  const result = await taskCollection.findByIdAndDelete(_id);
 
-  console.log(id);
   res.json({
     message: "success",
     status: "response from delete",
+    result,
   });
 });
 

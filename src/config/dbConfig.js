@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-const mongoURL = "mongodb://localhost:27017/online_ntdl";
+const mongoURL = process.env.MONGO_URL;
 
 export const connectMongoDb = async () => {
   try {

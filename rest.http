@@ -22,11 +22,14 @@ Content-Type: application/json
 
 
 {
-    "_id":"6a0f00a7068d5c9d4d9ec24f",
-    "task":"coding",
-    "hr": 3,
+    "_id":"6a129a9267d5082186865674",
     "type": "bad"
 }
 
 ### Delete the task list
-DELETE {{baseUrl}}/6a0f07f3b943774b824c6cd4
+DELETE {{baseUrl}}
+Content-Type: application/json
+
+[
+    "6a129a9867d5082186865676","6a129a9867d5082186865677","6a129a9867d5082186865678"
+]

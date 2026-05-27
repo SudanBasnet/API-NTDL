@@ -17,10 +17,15 @@ router.post("/", async (req, res, next) => {
     const result = await insertTask(req.body);
     console.log(result);
     // console.log(req.body);
-    res.json({
-      message: "success",
-      status: "New Task has been added Successfully",
-    });
+    result?._id
+      ? res.json({
+          status: "success",
+          message: "New Task has been added Successfully",
+        })
+      : res.json({
+          message: "error",
+          status: "can not add task",
+        });
   } catch (error) {
     console.log(error);
     res.json({
@@ -35,35 +40,58 @@ router.get("/", async (req, res, next) => {
   //db.c.find()
   const tasks = await getTask();
   res.json({
-    message: "success",
-    status: "response from get",
+    status: "success",
+    message: "Tasks fetched successfully",
     tasks,
   });
 });
 
 router.patch("/", async (req, res, next) => {
-  //do your code
-  const { _id, ...rest } = req.body;
-  console.log(req.body);
-  const result = await updateTask(_id, rest);
-  res.json({
-    message: "success",
-    status: "response from put: your task has been updated successfully",
-  });
+  try {
+    const { _id, ...rest } = req.body;
+
+    const result = await updateTask(_id, rest);
+    result?.id
+      ? res.json({
+          status: "success",
+          message: "updated successfully",
+          result,
+        })
+      : res.json({
+          status: "error",
+          message: "unable to update the task,try again later",
+        });
+  } catch (error) {
+    res.json({
+      status: "error",
+      message: error.message,
+    });
+  }
 });
 
 //!delete
-router.delete("/:_id", async (req, res, next) => {
+router.delete("/", async (req, res, next) => {
+  try {
+    const result = await deleteTask(req.body);
+    console.log(result);
+    result?.deletedCount
+      ? res.json({
+          status: "success",
+          message: "task has been deleted successfully",
+        })
+      : res.json({
+          status: "error",
+          message: "task was not deleted ",
+        });
+  } catch (error) {
+    res.json({
+      status: "error",
+      message: error.message,
+    });
+  }
   //do your code
-  const { _id } = req.params;
-  console.log(typeof id);
-  const result = await deleteTask(_id);
 
-  res.json({
-    message: "success",
-    status: "response from delete",
-    result,
-  });
+  // console.log(typeof _id);
 });
 
 export default router;
